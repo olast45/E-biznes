@@ -1,0 +1,11 @@
+POST /products controllers.ProductController.addProduct()
+
+GET /products controllers.ProductController.showAll()
+
+GET /products/:id controllers.ProductController.showById(id: Long)
+
+DELETE /products/:id controllers.ProductController.deleteProduct(id: Long)
+
+DELETE /products controllers.ProductController.deleteAllProducts()
+
+PUT /products/:id controllers.ProductController.updateProduct(id: Long)
