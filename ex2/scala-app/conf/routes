@@ -9,3 +9,15 @@ DELETE /products/:id controllers.ProductController.deleteProduct(id: Long)
 DELETE /products controllers.ProductController.deleteAllProducts()
 
 PUT /products/:id controllers.ProductController.updateProduct(id: Long)
+
+POST /categories controllers.CategoryController.addCategory()
+
+GET /categories controllers.CategoryController.showAll()
+
+GET /categories/:id controllers.CategoryController.showById(id: Long)
+
+DELETE /categories/:id controllers.CategoryController.deleteCategory(id: Long)
+
+DELETE /categories controllers.CategoryController.deleteAllCategories()
+
+PUT /categories/:id controllers.CategoryController.updateCategory(id: Long)
