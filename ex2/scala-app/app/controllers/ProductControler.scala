@@ -11,6 +11,7 @@ import models.Product
 class ProductController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
     var products = scala.collection.mutable.ListBuffer.empty[Product]
+    var currentId = 0 // Autoincrementing id
 
     def showAll() = Action { implicit request: Request[AnyContent] => 
 
@@ -105,31 +106,23 @@ class ProductController @Inject()(val controllerComponents: ControllerComponents
     def addProduct() = Action { implicit request: Request[AnyContent] =>
         request.body.asJson match {
             case Some(body) =>
-                val idOpt = (body \ "id").asOpt[Long]
                 val nameOpt = (body \ "name").asOpt[String]
                 val priceOpt = (body \ "price").asOpt[Double]
 
-                idOpt match {
-                    case Some(id) => 
-                        val foundProduct = products.find(_.id == id)
-                        foundProduct match {
-                            case Some(product) => Conflict(s"Product with id=$id already exists")
+                (nameOpt, priceOpt) match {
+                    case (Some(name), Some(price)) =>
+                        currentId += 1
+                        val newProduct = Product(currentId, name, price)
+                        products += newProduct
+                        Ok("Product added!")
 
-                            case None => 
-                                if (nameOpt.isDefined && priceOpt.isDefined) {
-                                    val newProduct = Product(id, nameOpt.get, priceOpt.get)
-                                    products += newProduct
-                                    Ok("Product added!")
-                                } else {
-                                    BadRequest("Required fields are missing!")
-                                }
-                        }
-
-                    case None => BadRequest("Id field is missing!")    
-                
+                    case _ =>
+                        BadRequest("Required fields are missing!")
                 }
 
-            case None => BadRequest("Request doesn't have a body!")
+            case None =>
+                BadRequest("Request doesn't have a body!")
         }
     }
+
 }
