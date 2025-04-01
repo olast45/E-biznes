@@ -21,3 +21,23 @@ DELETE /categories/:id controllers.CategoryController.deleteCategory(id: Long)
 DELETE /categories controllers.CategoryController.deleteAllCategories()
 
 PUT /categories/:id controllers.CategoryController.updateCategory(id: Long)
+
+POST /carts controllers.CartController.createCart()
+
+POST /carts/:id controllers.CartController.addProductToCart(id: Long)
+
+GET /carts controllers.CartController.showAll()
+
+GET /carts/:id controllers.CartController.showById(id: Long)
+
+GET /carts/:id/products controllers.CartController.showAllProducts(id: Long)
+
+DELETE /carts controllers.CartController.deleteAllCarts()
+
+DELETE /carts/:id controllers.CartController.deleteCart(id: Long)
+
+DELETE /carts/:cartId/products/:productId controllers.CartController.deleteProductFromCart(cartId: Long, productId: Long)
+
+DELETE /carts/:id/products controllers.CartController.deleteAllProductsFromCart(id: Long)
+
+PUT /carts/:cartId/products/:productId controllers.CartController.updateProductInCart(cartId: Long, productId: Long)
