@@ -44,15 +44,20 @@ suspend fun main() {
     val token = dotenv["TOKEN"] ?: "default_value"
     val messageContent = "Hello from Ktor framework!"
     val channelId = "1357077739412127928"
+    val categories = listOf("books", "music", "fashion", "technology")
     val bot = Kord(token)
 
 
     bot.on<MessageCreateEvent> {
         if (message.author?.isBot == true) return@on
         val msg = message.content
-        println("Received: $msg")
-
-        sendMessageToChannel(token, channelId, messageContent)
+        if (msg == "categories") {
+            val categoriesToString = categories.joinToString(prefix = "Available categories: ", separator = ", ")
+            sendMessageToChannel(token, channelId, categoriesToString)
+        }
+        else {
+            sendMessageToChannel(token, channelId, messageContent)
+        }
 
     }
 
