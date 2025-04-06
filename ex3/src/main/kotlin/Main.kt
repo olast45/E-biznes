@@ -6,17 +6,17 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
-import io.github.cdimascio.dotenv.Dotenv
 import dev.kord.core.Kord
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 
-val dotenv = Dotenv.load()
-
 @Serializable
 data class Message(val content: String)
+
+@Serializable
+data class Product(val name: String, val price: Long, val category: String)
 
 suspend fun sendMessageToChannel(botToken: String, channelId: String, messageContent: String) {
     val client = HttpClient(CIO) {
@@ -41,19 +41,19 @@ suspend fun sendMessageToChannel(botToken: String, channelId: String, messageCon
 @OptIn(PrivilegedIntent::class)
 suspend fun main() {
 
-    val token = dotenv["TOKEN"] ?: "default_value"
-    val messageContent = "Hello from Ktor framework!"
-    val channelId = "1357077739412127928"
-    val categories = listOf("books", "music", "fashion", "technology")
     val bot = Kord(token)
-
 
     bot.on<MessageCreateEvent> {
         if (message.author?.isBot == true) return@on
         val msg = message.content
         if (msg == "categories") {
-            val categoriesToString = categories.joinToString(prefix = "Available categories: ", separator = ", ")
+            val categoriesToString = categories.joinToString(prefix = "Available categories:\n", separator = "\n")
             sendMessageToChannel(token, channelId, categoriesToString)
+        }
+        else if (categories.contains(msg)) {
+            val filteredProducts = products.filter { it.category == msg }
+            val productsToString = filteredProducts.joinToString(prefix = "Available products for this category:\n", separator = "\n")
+            sendMessageToChannel(token, channelId, productsToString)
         }
         else {
             sendMessageToChannel(token, channelId, messageContent)
