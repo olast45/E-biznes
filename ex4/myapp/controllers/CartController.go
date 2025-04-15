@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
 
@@ -59,6 +60,12 @@ func (cc *CartController) CreateCart(c echo.Context) error {
 	if err := decoder.Decode(&cart); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": "Invalid JSON payload",
+		})
+	}
+
+	if err := validator.New().Struct(&cart); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": err.Error(),
 		})
 	}
 
