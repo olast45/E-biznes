@@ -29,3 +29,15 @@ func CartRoutes(e *echo.Echo) {
 	e.DELETE("/carts/:id", controller.DeleteCart)
 	e.DELETE("/carts", controller.DeleteAllCarts)
 }
+
+func CategoryRoutes(e *echo.Echo) {
+
+	var controller controllers.CategoryController
+
+	e.GET("/categories/:id", controller.GetCategoryById)
+	e.GET("/categories", controller.GetAllCategories)
+	e.POST("/categories", controller.CreateCategory)
+	e.PUT("/categories/:id", controller.UpdateCategory)
+	e.DELETE("/categories/:id", controller.DeleteCategory)
+
+}

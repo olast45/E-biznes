@@ -18,6 +18,7 @@ func ConnectToDatabase() *gorm.DB {
 
 	db.AutoMigrate(&models.Product{})
 	db.AutoMigrate(&models.Cart{})
+	db.AutoMigrate(&models.Category{})
 
 	return db
 
@@ -37,6 +38,7 @@ func main() {
 
 	routes.ProductRoutes(e)
 	routes.CartRoutes(e)
+	routes.CategoryRoutes(e)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
 
@@ -62,6 +63,23 @@ func (pc *ProductController) CreateProduct(c echo.Context) error {
 		})
 	}
 
+	if err := validator.New().Struct(&product); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": err.Error(),
+		})
+	}
+
+	var category models.Category
+	
+	if product.CategoryID != nil {
+		if err := db.First(&category, *product.CategoryID).Error; err != nil {
+			return c.JSON(http.StatusNotFound, map[string]string{
+				"error": "Category not found",
+			})
+		}
+	}
+	
+
 	if err := db.Create(&product).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Could not create product",
@@ -97,6 +115,15 @@ func (pc *ProductController) UpdateProduct(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{
 			"error": "Invalid JSON payload",
 		})
+	}
+
+	if categoryID, exists := updates["category_id"]; exists {
+		var category models.Category
+		if err := db.First(&category, categoryID).Error; err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]string{
+				"error": "Category ID does not exist",
+			})
+		}
 	}
 
 	if err := db.Model(&product).Updates(updates).Error; err != nil {
