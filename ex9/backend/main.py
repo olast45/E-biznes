@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import requests
 import os
 from dotenv import load_dotenv
+from conversation_phrases import get_random_greeting, get_random_farewell
 
 load_dotenv()
 
@@ -24,6 +25,14 @@ MODEL = "llama3-8b-8192"
 
 class ChatRequest(BaseModel):
     message: str
+
+@app.get("/start-conversation")
+def start_session():
+    return {"message": get_random_greeting()}
+
+@app.get("/end-conversation")
+def end_session():
+    return {"message": get_random_farewell()}
 
 @app.post("/chat")
 def chat(request: ChatRequest):
