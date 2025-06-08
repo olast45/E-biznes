@@ -1,9 +1,8 @@
 import streamlit as st
 import requests
 import base64
-import os
 
-API_URL = os.getenv("API_URL", "http://localhost:8000")
+API_URL = "https://backend-ex10.onrender.com"
 
 st.set_page_config(page_title="🐾 Cat Gallery 🐱", page_icon="🐱", layout="centered")
 
