@@ -1,6 +1,6 @@
 # E-biznes
 
-Link to docker image: https://hub.docker.com/repository/docker/olast45/olast-ebiznes-ex1
+Link to docker image: https://hub.docker.com/r/olast45/olast-ebiznes-ex1
 
 ✅ 3.0 obraz ubuntu z Pythonem w wersji 3.10 <br />
 
